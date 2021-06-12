@@ -11,7 +11,7 @@ void KeyScheduler::SetNewKey(uint64_t newKey) {	//PC - 1
 	pc1 >>= 28;
 	uint32_t d = pc1 & 0x000000000FFFFFFF;
 	key = { c, d };
-	std::cout << std::bitset<28>{ key.C } << " " << std::bitset<28>{key.D} << std::endl;
+	//std::cout << std::bitset<28>{ key.C } << " " << std::bitset<28>{key.D} << std::endl;
 }
 
 uint32_t rotateLeft(uint32_t data, int shift) {
@@ -45,5 +45,5 @@ void KeyScheduler::Rotate(int round) {
 	if (round == 1 || round == 2 || round == 9 || round == 16) shift = 1;
 	key.C = rotateLeft(key.C, shift);
 	key.D = rotateLeft(key.D, shift);
-	std::cout << std::bitset<28>{ key.C } << " " << std::bitset<28>{key.D} << std::endl;
+	//std::cout << std::bitset<28>{ key.C } << " " << std::bitset<28>{key.D} << std::endl;
 }

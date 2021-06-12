@@ -19,6 +19,8 @@ int main() {
 	std::string message = "Hello";
 	uint64_t key = 0xDC41346232A10023;
 	DES_encrypter encrypter;
+	//std::cout << "Message: " << std::hex << message << std::endl;
+	//std::cout << "Key: " << std::hex << key << std::endl;
 	encrypter.Encrypt(message, key);
 	
 	/*

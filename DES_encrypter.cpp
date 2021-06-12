@@ -30,6 +30,7 @@ uint64_t DES_encrypter::InitialPermutation(std::string token) {
 	for (int i = 0; i < result.size(); i++) {
 		result[i] = plainText[TranslationTables::IP[i] - 1];
 	}
+	//std::cout << "After IP: " << std::hex << result.to_ullong() << std::endl;
 	return result.to_ullong();
 }
 
