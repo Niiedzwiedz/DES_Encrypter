@@ -9,7 +9,7 @@ struct Key {
 class KeyScheduler {
 private:
 	Key key = {0x0, 0x0};
-
+	uint64_t roundKeys[16] = {0x0};
 protected:
 public:
 	KeyScheduler() { }

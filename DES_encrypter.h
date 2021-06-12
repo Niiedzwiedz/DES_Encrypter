@@ -30,8 +30,9 @@ public:
 		sBoxes.push_back(SBox(TranslationTables::S8));
 	}
 
-	void Encrypt(std::string, uint64_t);
+	uint64_t Encrypt(std::string, uint64_t);
 	uint64_t InitialPermutation(std::string);
+	uint64_t FinalPermutation();
 	uint64_t StrToAscii(std::string);
 	void Round();
 	uint32_t Ffunction(uint32_t);

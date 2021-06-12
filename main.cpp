@@ -16,12 +16,13 @@ uint64_t strtoascii(std::string toconvert) {
 */
 
 int main() {
-	std::string message = "Hello";
-	uint64_t key = 0xDC41346232A10023;
+	std::string message = "00000000";
+	uint64_t key = 0x01E001E001F101F1;
+	//uint64_t key = 0x0000000000000001;
+	//uint64_t key = 0x000000000000000;
 	DES_encrypter encrypter;
-	//std::cout << "Message: " << std::hex << message << std::endl;
-	//std::cout << "Key: " << std::hex << key << std::endl;
-	encrypter.Encrypt(message, key);
+	std::cout << "setKey(" << std::hex << key << ")" << std::endl;
+	std::cout << "Encrypted(hex):\t\t" << std::hex << encrypter.Encrypt(message, key) << std::endl;
 	
 	/*
 	std::string message = "Hello";

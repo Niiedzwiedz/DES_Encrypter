@@ -7,11 +7,14 @@ void KeyScheduler::SetNewKey(uint64_t newKey) {	//PC - 1
 		result[i] = packedKey[TranslationTables::PC1[i] - 1];
 	}
 	uint64_t pc1 = result.to_ullong();
-	uint32_t c = pc1 & 0x000000000FFFFFFF;
-	pc1 >>= 28;
 	uint32_t d = pc1 & 0x000000000FFFFFFF;
+	pc1 >>= 28;
+	uint32_t c = pc1 & 0x000000000FFFFFFF;
 	key = { c, d };
-	//std::cout << std::bitset<28>{ key.C } << " " << std::bitset<28>{key.D} << std::endl;
+
+	for (int i = 1; i <= 16; i++) {
+		roundKeys[i-1] = Transform(i);
+	}
 }
 
 uint32_t rotateLeft(uint32_t data, int shift) {
@@ -19,7 +22,7 @@ uint32_t rotateLeft(uint32_t data, int shift) {
 }
 
 uint64_t KeyScheduler::getSheduledKey(int round) {
-	return Transform(round);
+	return roundKeys[round - 1];
 }
 
 
@@ -45,5 +48,4 @@ void KeyScheduler::Rotate(int round) {
 	if (round == 1 || round == 2 || round == 9 || round == 16) shift = 1;
 	key.C = rotateLeft(key.C, shift);
 	key.D = rotateLeft(key.D, shift);
-	//std::cout << std::bitset<28>{ key.C } << " " << std::bitset<28>{key.D} << std::endl;
 }
