@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <string>
 #include <vector>
+#include <fstream>
 
 //==========================================================//
 //							Tools							//
@@ -24,20 +25,6 @@ uint64_t constexpr Mirror(uint64_t target, int size) {
 	}
 	return result;
 }
-
-/*
-uint64_t StrToAscii(std::string toconvert) {
-	uint64_t result = 0x0;
-	int i = 0;
-	while (i < toconvert.length()) {
-		result <<= 8;
-		result |= ((int)(char)toconvert.at(i) & 255UL);
-		i++;
-	}
-	result <<= 8 * (8 - i);
-	return result;
-}
-*/
 
 //==========================================================//
 //					  Translation Tables					//
@@ -128,7 +115,7 @@ public:
 	};
 	static constexpr uint8_t S7[4][16] = {
 		{ 4, 11,  2, 14, 15,  0,  8, 13,  3, 12,  9,  7,  5, 10,  6,  1},
-		{13,  0, 11,  7,  4,  9,  1, 10, 14,  3, 15, 12,  2, 15,  8,  6},
+		{13,  0, 11,  7,  4,  9,  1, 10, 14,  3,  5, 12,  2, 15,  8,  6},
 		{ 1,  4, 11, 13, 12,  3,  7, 14, 10, 15,  6,  8,  0,  5,  9,  2},
 		{ 6, 11, 13,  8,  1,  4, 10,  7,  9,  5,  0, 15, 14,  2,  3, 12}
 	};

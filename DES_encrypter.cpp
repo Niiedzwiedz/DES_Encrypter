@@ -4,7 +4,7 @@ uint64_t DesEncrypter::Encrypt(uint64_t toEncrypt, uint64_t key) {
 	scheduler.SetNewKey(key);
 	round = 1;
 
-	std::cout << "To Encrypt:\t" << std::hex << toEncrypt << std::endl;
+	//std::cout << "To Encrypt:\t" << std::hex << toEncrypt << std::endl;
 
 	//Initial Permutatuion
 	uint64_t ip = InitialPermutation(toEncrypt);
@@ -12,8 +12,8 @@ uint64_t DesEncrypter::Encrypt(uint64_t toEncrypt, uint64_t key) {
 	dataBlock.R = ip & 0x00000000FFFFFFFF;
 	dataBlock.L = (ip >> 32) & 0x00000000FFFFFFFF;
 
-	//std::cout << "L:\t" << std::bitset<32>{dataBlock.L} << std::endl;
-	//std::cout << "R:\t" << std::bitset<32>{dataBlock.R} << std::endl;
+	//std::cout << "L:\t" << std::hex << dataBlock.L << " \t";
+	//std::cout << "R:\t" << std::hex << dataBlock.R << std::endl;
 
 
 	while (round <= 16) {
@@ -22,12 +22,12 @@ uint64_t DesEncrypter::Encrypt(uint64_t toEncrypt, uint64_t key) {
 		dataBlock.L = r;
 		round++;
 
-		//std::cout << "L" << round - 1 << ":\t" << std::bitset<32>{dataBlock.L} << std::endl;
-		//std::cout << "R" << round - 1 << ":\t" << std::bitset<32>{dataBlock.R} << std::endl;
+		//std::cout << "L" << round - 1 << ":\t" << std::hex << dataBlock.L << " \t";
+		//std::cout << "R" << round - 1 << ":\t" << std::hex << dataBlock.R << std::endl;
 	}
 
 
-	std::cout << "Encrypted:\t" << std::hex << Mirror(FinalPermutation(dataBlock.R, dataBlock.L), 64) << std::endl;
+	//std::cout << "Encrypted:\t" << std::hex << Mirror(FinalPermutation(dataBlock.R, dataBlock.L), 64) << std::endl;
 	return Mirror(FinalPermutation(dataBlock.R, dataBlock.L), 64);
 }
 
@@ -42,7 +42,7 @@ uint64_t DesEncrypter::InitialPermutation(uint64_t token) {
 		result[i] = plainText[TranslationTables::IP[i] - 1];
 	}
 
-	//std::cout << "IP:\t" << std::bitset<64>{Mirror(result.to_ullong(), 64)} << std::endl;
+	//std::cout << "IP:\t" << std::hex << Mirror(result.to_ullong(), 64) << std::endl;
 
 	return Mirror(result.to_ullong(), 64);
 }
@@ -56,7 +56,7 @@ uint32_t DesEncrypter::Feisnel(uint32_t r) {
 
 	e ^= scheduler.GetRoundKey(round);
 
-	//std::cout << "K+E: \t" << std::bitset<48>{e} << std::endl;
+	//std::cout << "K+E: \t" << std::hex << e << std::endl;
 
 	uint8_t SBoxResults[8];
 	for (int i = 7; i >= 0; i--) {
@@ -71,7 +71,7 @@ uint32_t DesEncrypter::Feisnel(uint32_t r) {
 		result |= SBoxResults[i] & 0b1111;
 	}
 
-	//std::cout << "SBOX:\t" << std::bitset<32>{result} << std::endl;
+	//std::cout << "SBOX:\t" << std::hex << result << std::endl;
 
 	return Permutation(result);
 }
@@ -127,7 +127,7 @@ uint64_t DesEncrypter::Decrypt(uint64_t toEncrypt, uint64_t key) {
 	scheduler.SetNewKey(key);
 	round = 16;
 
-	std::cout << "To Decrypt:\t" << std::hex << toEncrypt << std::endl;
+	//std::cout << "To Decrypt:\t" << std::hex << toEncrypt << std::endl;
 
 	//Initial Permutatuion
 	uint64_t ip = InitialPermutation(toEncrypt);
@@ -150,6 +150,6 @@ uint64_t DesEncrypter::Decrypt(uint64_t toEncrypt, uint64_t key) {
 	}
 
 
-	std::cout << "Decrypted:\t" << std::hex << Mirror(FinalPermutation(dataBlock.R, dataBlock.L), 64) << std::endl;
+	//std::cout << "Decrypted:\t" << std::hex << Mirror(FinalPermutation(dataBlock.R, dataBlock.L), 64) << std::endl;
 	return Mirror(FinalPermutation(dataBlock.R, dataBlock.L), 64);
 }

@@ -16,7 +16,7 @@ public:
 
 	void SetNewKey(uint64_t);
 	uint64_t PC1(uint64_t);
-	uint64_t Transform(int);
+	void Transform(int);
 	void Rotate(int);
 	uint64_t PC2();
 	uint64_t GetRoundKey(int i) { return roundKeys[i - 1]; }

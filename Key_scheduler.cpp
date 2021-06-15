@@ -10,17 +10,29 @@ void KeyScheduler::SetNewKey(uint64_t newKey) {
 
 	//std::cout << "C:\t" << std::bitset<28>{c} << std::endl;
 	//std::cout << "D:\t" << std::bitset<28>{d} << std::endl;
-
+	
 	key = { c, d };
+
+	//std::cout << "R " << 0 << "\t";
+	//std::cout << "C: " << std::hex << key.C << "   ";
+	//std::cout << "D: " << std::hex << key.D << std::endl;
 
 	//=====================================
 	for (int i = 1; i <= 16; i++) {
-		Transform(i);
+		Rotate(i);
 		//std::cout << "R " << i << "\t";
+		//std::cout << "C: " << std::hex << key.C << "   ";
+		//std::cout << "D: " << std::hex << key.D << std::endl;
 		//std::cout << "C: " << std::bitset<28>{key.C} << "   ";
 		//std::cout << "D: " << std::bitset<28>{key.D} << std::endl;
+
 		roundKeys[i - 1] = PC2();
 	}
+
+	/*
+	for (int i = 1; i <= 16; i++) {
+		std::cout << i << "\t" << std::hex << roundKeys[i - 1] << std::endl;
+	}//*/
 	//=====================================
 }
 
@@ -35,16 +47,11 @@ uint64_t KeyScheduler::PC1(uint64_t newKey) {
 		result[i] = packedKey[TranslationTables::PC1[i] - 1];
 	}
 
-	//uint64_t pc1 = Mirror(result.to_ullong(), 56);
+	uint64_t pc1 = Mirror(result.to_ullong(), 56);
 	//std::cout << "56b Key:\t" << std::bitset<56>{result} << std::endl;
-	//std::cout << "56b Key:\t" << std::bitset<56>{pc1} << std::endl;
+	//std::cout << "56b Key:\t" << std::hex << pc1 << std::endl;
 
 	return Mirror(result.to_ullong(), 56);
-}
-
-uint64_t KeyScheduler::Transform(int round) {
-	Rotate(round);
-	return 0x0; //PrepareKey();
 }
 
 void KeyScheduler::Rotate(int round) {
