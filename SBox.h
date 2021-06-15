@@ -13,7 +13,7 @@ public:
 	}
 
 	uint8_t Substitute(uint8_t code) {
-		unsigned int row = ((code & 0b00100000) >> 4 ) | (code & 0b00000001);
+		unsigned int row = ((code & 0b00100000) >> 4) | (code & 0b00000001);
 		unsigned int column = (code & 0b00011110) >> 1;
 		return subTable[row][column];
 	}

@@ -8,6 +8,38 @@
 #include <vector>
 
 //==========================================================//
+//							Tools							//
+//==========================================================//
+
+uint32_t constexpr rotateLeft(uint32_t data, int shift) {
+	return ((data << shift) | ((data >> 28 - shift)) & 0xfffffff);
+}
+
+uint64_t constexpr Mirror(uint64_t target, int size) {
+	uint64_t result = 0x0;
+	for (int i = 0; i < size; i++) {
+		result <<= 1;
+		result |= (target & 0x1);
+		target >>= 1;
+	}
+	return result;
+}
+
+/*
+uint64_t StrToAscii(std::string toconvert) {
+	uint64_t result = 0x0;
+	int i = 0;
+	while (i < toconvert.length()) {
+		result <<= 8;
+		result |= ((int)(char)toconvert.at(i) & 255UL);
+		i++;
+	}
+	result <<= 8 * (8 - i);
+	return result;
+}
+*/
+
+//==========================================================//
 //					  Translation Tables					//
 //==========================================================//
 
@@ -56,7 +88,7 @@ public:
 	 2,  8, 24, 14, 32, 27,  3,  9,
 	19, 13, 30,  6, 22, 11,  4, 25
 	};
-	
+
 	//S-blocks Tables
 	static constexpr uint8_t S1[4][16] = {
 		{14,  4, 13,  1,  2, 15, 11,  8,  3, 10,  6, 12,  5,  9,  0,  7},

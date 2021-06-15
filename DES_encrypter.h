@@ -3,14 +3,14 @@
 #include "Key_scheduler.h"
 #include "SBox.h"
 
-struct TextBlock {
+struct DataBlock {
 	uint32_t L;
 	uint32_t R;
 };
 
-class DES_encrypter {
+class DesEncrypter {
 private:
-	TextBlock dataBlock;
+	DataBlock dataBlock;
 	std::string message;
 	KeyScheduler scheduler;
 	int round = { 1 };
@@ -19,7 +19,7 @@ private:
 protected:
 
 public:
-	DES_encrypter() :  dataBlock{ 0x0, 0x0 }, message(""), scheduler() { 
+	DesEncrypter() : dataBlock{ 0x0, 0x0 }, message(""), scheduler() {
 		sBoxes.push_back(SBox(TranslationTables::S1));
 		sBoxes.push_back(SBox(TranslationTables::S2));
 		sBoxes.push_back(SBox(TranslationTables::S3));
@@ -30,11 +30,11 @@ public:
 		sBoxes.push_back(SBox(TranslationTables::S8));
 	}
 
-	uint64_t Encrypt(std::string, uint64_t);
-	uint64_t InitialPermutation(std::string);
-	uint64_t FinalPermutation();
-	uint64_t StrToAscii(std::string);
-	void Round();
-	uint32_t Ffunction(uint32_t);
-	uint64_t Expand(uint32_t);
+	uint64_t Encrypt(uint64_t, uint64_t);
+	uint64_t Decrypt(uint64_t, uint64_t);
+	uint64_t InitialPermutation(uint64_t);
+	uint32_t Feisnel(uint32_t);
+	uint64_t Expansion(uint32_t);
+	uint32_t Permutation(uint32_t);
+	uint64_t FinalPermutation(uint32_t, uint32_t);
 };
