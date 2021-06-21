@@ -18,9 +18,6 @@
     <ClInclude Include="common.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="key.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="Key_scheduler.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
