@@ -363,5 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # CUSTOM IGNORES
-.bin
-.txt
+*.bin
+*.txt
