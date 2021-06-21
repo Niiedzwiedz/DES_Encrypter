@@ -152,6 +152,7 @@ public:
 //						  CLI COLORS						//
 //==========================================================//
 
+/*
 #define RESET	"\033[0m"	//Reset
 #define BLACK	"\033[30m"	//Black
 #define RED		"\033[31m"	//Red
@@ -170,3 +171,4 @@ public:
 #define BRIGHTMAGENTA	"\033[95m"	//Bright Magenta
 #define BRIGHTCYAN		"\033[96m"	//Bright Cyan
 #define BRIGHTWHITE		"\033[97m"	//Bright White
+*/

@@ -5,8 +5,6 @@ class SBox
 {
 private:
 	uint8_t subTable[4][16];
-protected:
-
 public:
 	SBox(const uint8_t newTable[4][16]) {
 		for (int i = 0; i < 16 * 4; i++) subTable[i / 16][i % 16] = newTable[i / 16][i % 16];

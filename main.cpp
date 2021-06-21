@@ -27,49 +27,96 @@ std::string AsciiToStr(uint64_t toconvert) {
 	return result;
 }
 
-
-int main(int argc, char* argv[]) {
-	DesEncrypter encrypter;
-
-	std::cout << "Wprowadz wiadomosc do zakodowania: ";
-
+void getFromKeyboard(std::vector<uint64_t>& result) {	//If no args
+	std::cout << "Type message to encode: ";
 	std::string inMessage;
-	std::cin >> inMessage;
+	std::getline(std::cin, inMessage);
 
-	std::vector<uint64_t> message;
-	std::vector<uint64_t> keys;
 	while (!inMessage.empty()) {
 		//Get token
-		message.push_back(StrToAscii(inMessage.substr(0, 8)));
+		result.push_back(StrToAscii(inMessage.substr(0, 8)));
 		inMessage.erase(0, 8);
 	}
+}
 
-	std::ifstream is("key.bin", std::ifstream::binary);
-
-	for (int i = 0; i < message.size(); i++) {
-		char buffer[8];
+void getFromFile(std::vector<uint64_t>& result, std::string file) { //If 1 arg
+	std::cout << "Reading From File: " << file << std::endl;
+	
+	std::ifstream is(file, std::ifstream::binary);
+	char buffer[8];
+	while (is.good()) {
+		for (int i = 0; i < 8; i++) buffer[i] = 0;
 		is.read(buffer, 8);
 
+		uint64_t token = 0x0;
+		for (int i = 0; i < 8; i++) {
+			token <<= 8;
+			token |= (uint8_t)buffer[i];
+		}
+		result.push_back(token);
+
+		if (is.eof()) break;
+	}
+}
+
+int main(int argc, char* argv[]) {
+	//Check input
+	std::vector<uint64_t> message;
+	if (argc < 2) getFromKeyboard(message);
+	else getFromFile(message, argv[1]);
+
+	DesEncrypter encrypter;
+	std::vector<uint64_t> encrypted;
+	std::vector<uint64_t> keys;
+	std::ifstream is("key.bin", std::ifstream::binary);
+
+	//Encrypt Data Blocks
+	for (int i = 0; i < message.size(); i++) {
+
+		std::cout << "======== Block no. " << std::setfill('0') << std::setw(size_t(4)) << std::dec << i+1 << " ========" << std::endl;
+
+		//Read Key From File;
+		char buffer[8];
+		is.read(buffer, 8);
 		uint64_t key = 0x0;
 		for (int i = 0; i < 8; i++) {
 			key <<= 8;
-			key |= buffer[i];
+			key |= (uint8_t)buffer[i];
 		}
 		keys.push_back(key);
 
+		//Encryption
+		encrypted.push_back(encrypter.Encrypt(message[i], keys[i]));
+		//Control Decryption
+		uint64_t decrypted = encrypter.Decrypt(encrypted[i], keys[i]);
+
+		//Printing
 		std::cout << "[Str] Message:\t" << AsciiToStr(message[i]) << std::endl;
+		std::cout << "[Hex] Message:\t" << std::hex << message[i] << std::endl;
 		std::cout << "[Hex] Key:    \t" << std::hex << keys[i] << std::endl;
+		std::cout << "[Hex] Encoded:\t" << std::hex << std::setfill('0') << std::setw(16) << encrypted[i] << std::endl;
+		std::cout << "[Hex] Decoded:\t" << std::hex << decrypted;
 
-		uint64_t result = encrypter.Encrypt(message[i], keys[i]);
-
-		std::cout << "[Hex] Encoded:\t" << std::hex << result << std::endl;
-
-		result = encrypter.Decrypt(result, keys[i]);
-
-		std::cout << "[Hex] Decoded:\t" << std::hex << result << std::endl;
-
-		std::cout << "================================" << std::endl;
+		if (decrypted == message[i]) std::cout << " OK" << std::endl;
+		else std::cout << " FAILURE" << std::endl;
 	}
 
+	std::cout << "======= [Hex] Encrypted: =======" << std::endl;
+
+	//Save result to file
+	std::ofstream os("out.bin", std::ifstream::binary);
+	for (int i = 0; i < encrypted.size(); i++) {
+		std::cout << std::setfill('0') << std::setw(16) << encrypted[i];
+		os << encrypted[i];
+		if (i % 2 == 1  && i+1 < encrypted.size()) std::cout << std::endl;
+	}
+
+	os.close();
+	is.close();
+
+	std::cout << std::endl << "================================" << std::endl;
+	std::cout << std::endl << "Press Enter to close program.";
+
+	getchar();
 	return 0;
 }
